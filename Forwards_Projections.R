@@ -23,6 +23,12 @@ pp_2020 <- select(read.csv("Data/PP_2020.csv"), c("Player", "PP.TOI"="TOI","PP.G
 pp_2021 <- select(read.csv("Data/PP_2021.csv"), c("Player", "PP.TOI"="TOI","PP.G"="Goals", "PP.S"="Shots", "PP.xG"="ixG"))
 pp_2022 <- select(read.csv("Data/PP_2022.csv"), c("Player", "PP.TOI"="TOI","PP.G"="Goals", "PP.S"="Shots", "PP.xG"="ixG"))
 
+
+
+
+
+
+
 ###
 ### Creating lists of dataframes and then merging them
 ###
@@ -42,7 +48,7 @@ bios_list <- lapply(seq_along(bios_list), function (i){
 
 # Merging all together
 for(i in seq_along(as_list)){
-    df <- select(bios_list[[i]], c("Player", "Date.of.Birth"))
+    df <- select(bios_list[[i]], c("Player", "Age", "Season"))
     df2 <- as_list[[i]]
     df3 <- pp_list[[i]]
     df4 <- merge(df, df2, by="Player")
@@ -52,4 +58,18 @@ for(i in seq_along(as_list)){
 
 
 
-View(all_list[[1]])
+###
+### Change stats to per minute
+###
+
+for(i in seq_along(all_list)){
+    all_list[[i]]$Goals <- all_list[[i]]$Goals / all_list[[i]]$TOI
+    all_list[[i]]$A <- all_list[[i]]$A / all_list[[i]]$TOI
+    all_list[[i]]$A1 <- all_list[[i]]$A1 / all_list[[i]]$TOI
+    all_list[[i]]$A2 <- all_list[[i]]$A2 / all_list[[i]]$TOI
+    all_list[[i]]$S <- all_list[[i]]$S / all_list[[i]]$TOI
+    all_list[[i]]$xG <- all_list[[i]]$xG / all_list[[i]]$TOI
+    all_list[[i]]$Hits <- all_list[[i]]$Hits / all_list[[i]]$TOI
+}
+
+head(all_list[[1]])
